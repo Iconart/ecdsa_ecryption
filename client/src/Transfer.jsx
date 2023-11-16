@@ -1,5 +1,6 @@
 import { useState } from "react";
 import server from "./server";
+import * as secp from "ethereum-cryptography/secp256k1";
 
 function Transfer({ address, setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
@@ -16,6 +17,7 @@ function Transfer({ address, setBalance }) {
       } = await server.post(`send`, {
         sender: address,
         amount: parseInt(sendAmount),
+        signature: secp.secp256k1.sign(secp.secp256k1.keccak256(sender + amount), sender, {recovered: true}),
         recipient,
       });
       setBalance(balance);
