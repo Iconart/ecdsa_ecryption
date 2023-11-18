@@ -17,6 +17,7 @@ function Transfer({ address, setBalance }) {
       } = await server.post(`send`, {
         sender: address,
         amount: parseInt(sendAmount),
+        signature: secp.secp256k1.sign(keccak256(address)),
         recipient,
       });
       setBalance(balance);
